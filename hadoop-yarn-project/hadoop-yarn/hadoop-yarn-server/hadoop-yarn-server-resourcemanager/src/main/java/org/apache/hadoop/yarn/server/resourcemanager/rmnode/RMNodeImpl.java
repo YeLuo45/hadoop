@@ -55,6 +55,7 @@ import org.apache.hadoop.yarn.api.records.NodeState;
 import org.apache.hadoop.yarn.api.records.Resource;
 import org.apache.hadoop.yarn.api.records.ResourceOption;
 import org.apache.hadoop.yarn.api.records.ResourceUtilization;
+import org.apache.hadoop.yarn.api.records.NodeAttribute;
 import org.apache.hadoop.yarn.event.EventHandler;
 import org.apache.hadoop.yarn.factories.RecordFactory;
 import org.apache.hadoop.yarn.factory.providers.RecordFactoryProvider;
@@ -184,6 +185,9 @@ public class RMNodeImpl implements RMNode, EventHandler<RMNodeEvent> {
 
   private NodeHeartbeatResponse latestNodeHeartBeatResponse = recordFactory
       .newRecordInstance(NodeHeartbeatResponse.class);
+
+  // Node attributes, store by prefix
+  private Map<String, Set<NodeAttribute>> nodeAttributes = new HashMap<>();
 
   private static final StateMachineFactory<RMNodeImpl,
                                            NodeState,
@@ -1551,5 +1555,16 @@ public class RMNodeImpl implements RMNode, EventHandler<RMNodeEvent> {
   @Override
   public Integer getDecommissioningTimeout() {
     return decommissioningTimeout;
+  }
+
+  @Override
+  public void setNodeAttributes(String prefix,
+      Set<NodeAttribute> nodeAttributeSet) {
+    this.nodeAttributes.put(prefix, nodeAttributeSet);
+  }
+
+  @Override
+  public Map<String, Set<NodeAttribute>> getAllNodeAttributes() {
+    return this.nodeAttributes;
   }
 }

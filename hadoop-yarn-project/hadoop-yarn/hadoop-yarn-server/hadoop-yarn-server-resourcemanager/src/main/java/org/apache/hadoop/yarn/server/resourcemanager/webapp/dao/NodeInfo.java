@@ -20,12 +20,14 @@ package org.apache.hadoop.yarn.server.resourcemanager.webapp.dao;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.hadoop.yarn.api.records.NodeAttribute;
 import org.apache.hadoop.yarn.api.records.NodeId;
 import org.apache.hadoop.yarn.api.records.NodeState;
 import org.apache.hadoop.yarn.server.api.records.OpportunisticContainersStatus;
@@ -58,6 +60,7 @@ public class NodeInfo {
   private int numQueuedContainers;
   protected ArrayList<String> nodeLabels = new ArrayList<String>();
   protected ResourceUtilizationInfo resourceUtilization;
+  protected NodeAttributesInfo nodeAttributesInfo;
 
   public NodeInfo() {
   } // JAXB needs this
@@ -105,6 +108,19 @@ public class NodeInfo {
     if (labelSet != null) {
       nodeLabels.addAll(labelSet);
       Collections.sort(nodeLabels);
+    }
+
+    // add attributes
+    Map<String, Set<NodeAttribute>> nodeAttributes =
+        ni.getAllNodeAttributes();
+    nodeAttributesInfo = new NodeAttributesInfo();
+    if (nodeAttributes != null) {
+      for (Set<NodeAttribute> attrs : nodeAttributes.values()) {
+        for (NodeAttribute attribute : attrs) {
+          NodeAttributeInfo info = new NodeAttributeInfo(attribute);
+          this.nodeAttributesInfo.addNodeAttributeInfo(info);
+        }
+      }
     }
 
     // update node and containers resource utilization

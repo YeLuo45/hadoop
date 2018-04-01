@@ -24,6 +24,7 @@ import org.apache.hadoop.net.Node;
 import org.apache.hadoop.yarn.api.records.ApplicationId;
 import org.apache.hadoop.yarn.api.records.Container;
 import org.apache.hadoop.yarn.api.records.ContainerId;
+import org.apache.hadoop.yarn.api.records.NodeAttribute;
 import org.apache.hadoop.yarn.api.records.NodeId;
 import org.apache.hadoop.yarn.api.records.NodeState;
 import org.apache.hadoop.yarn.api.records.Resource;
@@ -37,6 +38,7 @@ import org.apache.hadoop.yarn.server.resourcemanager.rmnode
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Private
@@ -206,6 +208,17 @@ public class RMNodeWrapper implements RMNode {
   @Override
   public Integer getDecommissioningTimeout() {
     return null;
+  }
+
+  @Override
+  public void setNodeAttributes(String prefix,
+      Set<NodeAttribute> nodeAttributes) {
+    node.setNodeAttributes(prefix, nodeAttributes);
+  }
+
+  @Override
+  public Map<String, Set<NodeAttribute>> getAllNodeAttributes() {
+    return node.getAllNodeAttributes();
   }
 
   @Override

@@ -21,6 +21,7 @@ package org.apache.hadoop.yarn.server.resourcemanager.rmnode;
 
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 
 import org.apache.hadoop.net.Node;
 import org.apache.hadoop.yarn.api.records.ApplicationId;
@@ -30,6 +31,7 @@ import org.apache.hadoop.yarn.api.records.NodeId;
 import org.apache.hadoop.yarn.api.records.NodeState;
 import org.apache.hadoop.yarn.api.records.Resource;
 import org.apache.hadoop.yarn.api.records.ResourceUtilization;
+import org.apache.hadoop.yarn.api.records.NodeAttribute;
 import org.apache.hadoop.yarn.server.api.protocolrecords.NodeHeartbeatResponse;
 import org.apache.hadoop.yarn.server.api.records.OpportunisticContainersStatus;
 
@@ -187,4 +189,16 @@ public interface RMNode {
    * @return the decommissioning timeout in second.
    */
   Integer getDecommissioningTimeout();
+
+  /**
+   * Sets node attributes per prefix.
+   * @param prefix node attribute prefix
+   * @param nodeAttributes node attributes
+   */
+  void setNodeAttributes(String prefix, Set<NodeAttribute> nodeAttributes);
+
+  /**
+   * @return all node attributes grouped by their prefix as a map.
+   */
+  Map<String, Set<NodeAttribute>> getAllNodeAttributes();
 }
